@@ -52,6 +52,10 @@ def evaluar_expresion(expresion: str) -> list[Token]:
         >>> evaluar_expresion("")
         []
     """
+
+    if expresion.strip() == "":
+        return []
+
     try:
         tokens = tokenizar_expresion(expresion)
     except ExpresionInvalida:
