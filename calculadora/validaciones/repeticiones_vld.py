@@ -34,4 +34,24 @@ def validar_repeticiones_vld(cadena: str) -> bool:
         >>> validar_repeticiones_vld("DD")
         False
     """
-    raise NotImplementedError()
+    """
+    if "VV" in cadena:
+        return False
+    if "LL" in cadena:
+        return False
+    if "DD" in cadena:
+        return False
+    return True
+    """
+
+    if cadena == "":
+        return False
+    return not ("VV" in cadena or "LL" in cadena or "DD" in cadena)
+
+#assert validar_repeticiones_vld("V") == True
+#assert validar_repeticiones_vld("VV") == False
+#assert validar_repeticiones_vld("MCMXCIV") == True
+#assert validar_repeticiones_vld("LL") == False
+#assert validar_repeticiones_vld("DD") == False
+
+    # raise NotImplementedError()

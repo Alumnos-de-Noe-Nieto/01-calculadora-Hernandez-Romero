@@ -44,4 +44,43 @@ def validar_orden_descendente(cadena: str) -> bool:
         >>> validar_orden_descendente("VIV")
         False
     """
-    raise NotImplementedError()
+
+    valores = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+
+    sustracciones_validas = {'IV', 'IX', 'XL', 'XC', 'CD', 'CM'}
+
+    i = 0
+    while i < len(cadena) - 1:
+        actual = cadena[i]
+        siguiente = cadena[i + 1]
+
+        par = actual + siguiente
+
+        # Caso sustracción
+        if par in sustracciones_validas:
+
+            if i > 0 and cadena[i - 1] == actual:
+                return False
+
+            if i + 2 < len(cadena):
+                despues = cadena[i + 2]
+                if valores[siguiente] < valores[despues]:
+                    return False
+
+            i += 2  # Saltamos el par
+        else:
+            if valores[actual] < valores[siguiente]:
+                return False
+            i += 1
+
+    return True
+
+""""
+assert validar_orden_descendente("XVI") == True
+assert validar_orden_descendente("IVX") == False
+assert validar_orden_descendente("MCMXCIV") == True
+assert validar_orden_descendente("IIV") == False
+assert validar_orden_descendente("VX") == False
+"""
+
+    #raise NotImplementedError()

@@ -48,4 +48,36 @@ def romano_a_entero(cadena: str) -> int:
     Raises:
         ExpresionInvalida: Si la cadena no es válida según las reglas de números romanos (símbolos inválidos, repeticiones inválidas, orden incorrecto, restas inválidas)
     """
-    raise NotImplementedError()
+    cadena = cadena.strip()
+
+    if not validar_simbolos(cadena):
+        raise ExpresionInvalida("contiene simbolos invalidos")
+
+    if not validar_repeticiones_icxm(cadena):
+        raise ExpresionInvalida("repeticion invalida de I, X, C o M")
+
+    if not validar_repeticiones_vld(cadena):
+        raise ExpresionInvalida("repeticion invalida de V, L o D")
+
+    if not validar_orden_descendente(cadena):
+        raise ExpresionInvalida("orden descendente invalido")
+
+    if not validar_restas(cadena):
+        raise ExpresionInvalida("restas invalidas")
+
+    valores = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+
+    total = 0
+    i = 0
+
+    while i < len(cadena):
+        if i + 1 < len(cadena) and valores[cadena[i]] < valores[cadena[i + 1]]:
+            total += valores[cadena[i + 1]] - valores[cadena[i]]
+            i += 2
+        else:
+            total += valores[cadena[i]]
+            i += 1
+
+    return total
+
+    #raise NotImplementedError()

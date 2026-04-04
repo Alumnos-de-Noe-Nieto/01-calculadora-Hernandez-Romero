@@ -30,4 +30,30 @@ def validar_simbolos(cadena: str) -> bool:
         >>> validar_simbolos("  XIV  ")
         True
     """
-    raise NotImplementedError()
+
+    cadena = cadena.strip()
+
+    if cadena == "":
+        return False
+
+    a = "IXVLCDM"
+    i = 0
+    while i < len(cadena):
+        caracter = cadena[i]
+        j = 0
+        encontrado = False
+        while j < len(a):
+            if caracter == a[j]:
+                encontrado = True
+                break
+            j += 1
+        if not encontrado:
+            return False
+        i += 1
+    return True
+
+print(validar_simbolos("  XIV  "))
+
+print(validar_simbolos("XIV"))
+
+#raise NotImplementedError()
