@@ -52,7 +52,21 @@ def evaluar_expresion(expresion: str) -> list[Token]:
         >>> evaluar_expresion("")
         []
     """
-    raise NotImplementedError()
+    try:
+        tokens = tokenizar_expresion(expresion)
+    except ExpresionInvalida:
+        raise
+
+    if not tokens:
+        return []
+
+    if not validar_estructura_tokens(tokens):
+        raise ExpresionInvalida(
+            f'La expresión "{expresion}" tiene una estructura inválida'
+        )
+
+    return tokens
+    #raise NotImplementedError()
 
 
 def tokenizar_expresion(expresion: str) -> list[Token]:
@@ -95,7 +109,43 @@ def tokenizar_expresion(expresion: str) -> list[Token]:
         >>> tokenizar_expresion("X+V")
         [Token("ROMANO", "X", 0), Token("SUMA", "+", 1), Token("ROMANO", "V", 2)]
     """
-    raise NotImplementedError()
+    tokens = []
+    i = 0
+
+    while i < len(expresion):
+        char = expresion[i]
+
+        # Espacio
+        if char == ' ':
+            tokens.append(Token("ESPACIO", char, i))
+            i += 1
+
+        # Suma
+        elif char == '+':
+            tokens.append(Token("SUMA", char, i))
+            i += 1
+
+        # Resta
+        elif char == '-':
+            tokens.append(Token("RESTA", char, i))
+            i += 1
+
+        # Romano
+        elif char in "IVXLCDM":
+            inicio = i
+            while i < len(expresion) and expresion[i] in "IVXLCDM":
+                i += 1
+            valor = expresion[inicio:i]
+            tokens.append(Token("ROMANO", valor, inicio))
+
+        # Error
+        else:
+            raise ExpresionInvalida(
+                f"Carácter inválido '{char}' en posición {i}"
+            )
+
+    return tokens
+    #raise NotImplementedError()
 
 
 def validar_estructura_tokens(tokens: list[Token]) -> bool:
@@ -129,4 +179,33 @@ def validar_estructura_tokens(tokens: list[Token]) -> bool:
         >>> validar_estructura_tokens([Token("SUMA", "+", 0), Token("ROMANO", "X", 1)])
         False
     """
-    raise NotImplementedError()
+    # Quitar espacios
+    tokens_filtrados = [t for t in tokens if t.tipo != "ESPACIO"]
+
+    # Debe haber al menos 3 tokens
+    if len(tokens_filtrados) < 3:
+        return False
+
+    # Debe ser impar
+    if len(tokens_filtrados) % 2 == 0:
+        return False
+
+    # Debe empezar y terminar con ROMANO
+    if tokens_filtrados[0].tipo != "ROMANO":
+        return False
+
+    if tokens_filtrados[-1].tipo != "ROMANO":
+        return False
+
+    # Alternancia
+    for i, token in enumerate(tokens_filtrados):
+        if i % 2 == 0:
+            if token.tipo != "ROMANO":
+                return False
+        else:
+            if token.tipo not in ("SUMA", "RESTA"):
+                return False
+
+    return True
+    #raise NotImplementedError()
+

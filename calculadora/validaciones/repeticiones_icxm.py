@@ -36,4 +36,26 @@ def validar_repeticiones_icxm(cadena: str) -> bool:
         >>> validar_repeticiones_icxm("MMMM")
         False
     """
-    raise NotImplementedError()
+    i = 0
+    contador = 1
+
+    while i < len(cadena) - 1:
+        if cadena[i] == cadena[i + 1]:
+            if cadena[i] in "IXCM":
+                contador += 1
+                if contador > 3:
+                    return False
+            #else:
+            #    return False  # por seguridad
+        else:
+            contador = 1  # reiniciar cuando cambia
+
+        i += 1
+
+    return True
+
+#assert validar_repeticiones_icxm("III") == True
+#assert validar_repeticiones_icxm("XXX") == True
+#assert validar_repeticiones_icxm("IIII") == False
+
+    #raise NotImplementedError()
